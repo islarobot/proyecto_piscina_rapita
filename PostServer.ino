@@ -24,10 +24,15 @@ const int led = LED_BUILTIN;
 
 const String postForms = "yeah";
 
+unsigned long previousMillis = 0;
+unsigned long interval = 43200000;
+
+
+
 void handleRoot() {
-  digitalWrite(led, 1);
+  
   server.send(200, "text/html", postForms);
-  digitalWrite(led, 0);
+  
 }
 
 
@@ -36,9 +41,13 @@ void handleGetArguments(){
   if(message == "1"){
   server.send(200, "text/plain", message);
   digitalWrite( ESP8266_GPIO4, HIGH );
+  Serial.println("encendido");
+  digitalWrite(led, 1);
   }else{
-    server.send(200, "text/plain", "error");
+    server.send(200, "text/plain", message);
     digitalWrite( ESP8266_GPIO4, LOW );
+    Serial.println("apagado");
+    digitalWrite(led, 0);
     }
   }
 
@@ -63,6 +72,8 @@ void setup(void) {
   Serial.println(ssid);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+  WiFi.setAutoReconnect(true);
+  WiFi.persistent(true);
 
   if (MDNS.begin("esp8266")) {
     Serial.println("MDNS responder started");
@@ -79,4 +90,27 @@ void setup(void) {
 
 void loop(void) {
   server.handleClient();
+
+//print the Wi-Fi status every 30 seconds
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >=interval){
+    switch (WiFi.status()){
+      case WL_NO_SSID_AVAIL:
+        Serial.println("Configured SSID cannot be reached");
+        break;
+      case WL_CONNECTED:
+        Serial.println("Connection successfully established");
+        break;
+      case WL_CONNECT_FAILED:
+        Serial.println("Connection failed");
+        ESP.restart();
+        break;
+    }
+    Serial.printf("Connection status: %d\n", WiFi.status());
+    Serial.print("RRSI: ");
+    Serial.println(WiFi.RSSI());
+    previousMillis = currentMillis;
+  }
+
+  
 }
