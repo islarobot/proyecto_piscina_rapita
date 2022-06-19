@@ -4,8 +4,8 @@
 #include <ESP8266mDNS.h>
 
 #ifndef STASSID
-#define STASSID "WIFI_EY_0"
-#define STAPSK  "23852385"
+#define STASSID "DWR-921-30FC"
+#define STAPSK  "603D0B3D"
 #endif
 #define ESP8266_GPIO4    4
 
@@ -13,7 +13,7 @@
 const char* ssid     = STASSID;
 const char* password = STAPSK;
 
-IPAddress ip(192,168,0,250);     
+IPAddress ip(192,168,0,220);     
 IPAddress gateway(192,168,0,1);   
 IPAddress subnet(255,255,255,0);   
 
