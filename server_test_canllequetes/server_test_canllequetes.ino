@@ -4,8 +4,8 @@
 #include <ESP8266mDNS.h>
 
 #ifndef STASSID
-#define STASSID "DWR-921-30FC"
-#define STAPSK  "603D0B3D"
+#define STASSID "WIFI_EY_0"
+#define STAPSK  "23852385"
 #endif
 #define ESP8266_GPIO4    4
 
